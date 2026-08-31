@@ -1,0 +1,17 @@
+schema-version: "1"
+name: platform-scenarios
+version: 2026.06.1
+viya-cadence: "2026.06"
+repository: sassoftware/sas-validation-platform-scenarios
+
+scenarios:
+  - id: helloviya-simple
+    path: scenarios/helloviya-simple
+  - id: helloviya-advanced
+    path: scenarios/helloviya-advanced
+  - id: sas-studio
+    path: scenarios/application-scenarios/sas-studio
+  - id: sas-visual-analytics
+    path: scenarios/application-scenarios/sas-visual-analytics
+  - id: sas-viya-cli
+    path: scenarios/technology-scenarios/sas-viya-cli
