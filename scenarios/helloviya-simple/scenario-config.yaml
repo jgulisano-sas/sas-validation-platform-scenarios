@@ -3,12 +3,12 @@ scenario-config:
   display-name: Hello Viya Simple
   runtime: locust
   entrypoints:
-    - tests/logonoff.py
     - tests/createcompute.py
+    - tests/logonoff.py
   workload-definitions:
     - workload-definitions/helloviya-simple-wrkld-def.yaml
-  required-resources: []
-
+  required-resources:
+    []
   name: hello-viya-simple
   description: Simple logon and logoff test using saslogon
   dependencies:

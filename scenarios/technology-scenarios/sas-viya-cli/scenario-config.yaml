@@ -8,7 +8,6 @@ scenario-config:
     - workload-definitions/sas-viya-cli-wrkld-def.yaml
   required-resources:
     - scenarios/technology-scenarios/sas-viya-cli/resources/test.sas
-
   name: sas-viya-cli-batch
   description: SAS viya cli batch tests
   dependencies:
@@ -36,8 +35,8 @@ scenario-config:
       path: resources
       file: test.sas
     - type: cli-profile
-      path: framework/execution/common
-      file: config.json
+      path: framework/python/templates
+      file: config.json.template
     - type: trusted-certs
-      path: framework/execution/common
-      file: trustedcerts.pem
+      path: trusted-certs-path-global-config
+      file: trusted-certs-path-global-config

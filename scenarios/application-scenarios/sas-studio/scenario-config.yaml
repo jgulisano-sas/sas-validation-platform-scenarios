@@ -3,11 +3,11 @@ scenario-config:
   display-name: SAS Studio
   runtime: locust
   entrypoints:
-    - tests/st_runsleep01.py
-    - tests/st_runsleep02.py
-    - tests/st_queryflow.py
     - tests/st_40nodesflow.py
     - tests/st_analystoptimizeflow.py
+    - tests/st_queryflow.py
+    - tests/st_runsleep01.py
+    - tests/st_runsleep02.py
   workload-definitions:
     - workload-definitions/sas-studio-wrkld-def.yaml
   required-resources:
@@ -16,7 +16,6 @@ scenario-config:
     - resources/dataflows/queryFlow.flw
     - resources/dataflows/40nodes.flw
     - resources/dataflows/flow_from_analyst_optimize.flw
-
   name: sas-studio
   description: SAS Studio scenarios
   dependencies:
