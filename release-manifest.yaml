@@ -2,7 +2,7 @@ schema-version: "1"
 name: platform-scenarios
 version: 2026.06.1
 viya-cadence: "2026.06"
-repository: sassoftware/sas-validation-platform-scenarios
+repository: jgulisano-sas/sas-validation-platform-scenarios
 
 scenarios:
   - id: helloviya-simple
