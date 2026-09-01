@@ -1,7 +1,7 @@
 schema-version: "1"
 name: platform-scenarios
-version: 2026.07.0
-viya-cadence: "2026.07"
+version: 2026.02.1
+viya-cadence: "2026.02"
 repository: jgulisano-sas/sas-validation-platform-scenarios
 
 scenarios:
