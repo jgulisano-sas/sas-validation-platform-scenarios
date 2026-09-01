@@ -8,11 +8,9 @@ the package targets.
 
 ## [Unreleased]
 
-Development toward SAS Viya cadence **2026.07**.
+## [2026.01.1] — not yet released
 
-## [2026.06.1] — not yet released
-
-Targets SAS Viya cadence **2026.06**.
+Targets SAS Viya cadence **2026.01**.
 
 ### Added
 
