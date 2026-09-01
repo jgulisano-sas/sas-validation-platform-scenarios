@@ -1,0 +1,130 @@
+name: Release scenario package
+
+on:
+  push:
+    tags:
+      - "[0-9][0-9][0-9][0-9].[0-9][0-9].[0-9]*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out release tag
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install manifest dependency
+        run: python -m pip install --disable-pip-version-check PyYAML
+
+      - name: Validate release metadata and package contents
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+          EXPECTED_REPOSITORY: ${{ github.repository }}
+        run: |
+          python - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          import yaml
+
+          tag = os.environ["RELEASE_TAG"]
+          expected_repository = os.environ["EXPECTED_REPOSITORY"]
+          if not re.fullmatch(r"\d{4}\.\d{2}\.\d+", tag):
+              raise SystemExit(f"Release tag must be YYYY.MM.PATCH: {tag}")
+
+          manifest_path = Path("release-manifest.yaml")
+          values = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
+          if not isinstance(values, dict):
+              raise SystemExit("release-manifest.yaml must contain a mapping")
+
+          for field in ("name", "version", "viya-cadence", "repository", "scenarios"):
+              if field not in values:
+                  raise SystemExit(f"release-manifest.yaml is missing '{field}'")
+
+          if values["version"] != tag:
+              raise SystemExit(
+                  f"Manifest version '{values['version']}' does not match tag '{tag}'"
+              )
+          cadence = ".".join(tag.split(".")[:2])
+          if values["viya-cadence"] != cadence:
+              raise SystemExit(
+                  f"Manifest viya-cadence '{values['viya-cadence']}' does not match '{cadence}'"
+              )
+          if values["repository"] != expected_repository:
+              raise SystemExit(
+                  f"Manifest repository '{values['repository']}' does not match "
+                  f"'{expected_repository}'"
+              )
+
+          scenario_ids = set()
+          for scenario in values["scenarios"]:
+              if not isinstance(scenario, dict):
+                  raise SystemExit("Every scenario entry must be a mapping")
+              scenario_id = scenario.get("id")
+              scenario_path = scenario.get("path")
+              if not isinstance(scenario_id, str) or not scenario_id:
+                  raise SystemExit("Every scenario must have a non-empty id")
+              if scenario_id in scenario_ids:
+                  raise SystemExit(f"Duplicate scenario id: {scenario_id}")
+              scenario_ids.add(scenario_id)
+              if not isinstance(scenario_path, str) or not scenario_path:
+                  raise SystemExit(f"Scenario '{scenario_id}' has no path")
+
+              root = Path(scenario_path)
+              config_path = root / "scenario-config.yaml"
+              if not root.is_dir() or not config_path.is_file():
+                  raise SystemExit(f"Scenario '{scenario_id}' is missing {config_path}")
+              config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+              config = config.get("scenario-config", {}) if isinstance(config, dict) else {}
+              if config.get("id") != scenario_id:
+                  raise SystemExit(f"Scenario id mismatch in {config_path}")
+              for entrypoint in config.get("entrypoints", []):
+                  if not (root / entrypoint).is_file():
+                      raise SystemExit(f"Missing entrypoint: {root / entrypoint}")
+              for resource in config.get("required-resources", []):
+                  if not Path(resource).exists():
+                      raise SystemExit(f"Missing required resource: {resource}")
+              for workload in config.get("workload-definitions", []):
+                  if not Path(workload).is_file():
+                      raise SystemExit(f"Missing workload definition: {workload}")
+          PY
+
+      - name: Build release archive
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          package="sas-validation-platform-scenarios-${RELEASE_TAG}"
+          mkdir "$package"
+          cp release-manifest.yaml README.md CHANGELOG.md "$package"
+          cp -R scenarios workload-definitions resources "$package"
+          tar --sort=name --mtime='UTC 2020-01-01' --owner=0 --group=0 --numeric-owner \
+            -czf "${package}.tar.gz" "$package"
+          sha256sum "${package}.tar.gz" > "${package}.tar.gz.sha256"
+
+      - name: Verify archive contents
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          package="sas-validation-platform-scenarios-${RELEASE_TAG}"
+          tar -tzf "${package}.tar.gz" | grep -qx "${package}/release-manifest.yaml"
+          test "$(tar -tzf "${package}.tar.gz" | grep -c '\.tar\.gz$')" -eq 0
+          sha256sum --check "${package}.tar.gz.sha256"
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          package="sas-validation-platform-scenarios-${RELEASE_TAG}"
+          gh release create "$RELEASE_TAG" \
+            "${package}.tar.gz" "${package}.tar.gz.sha256" \
+            --title "Scenario package ${RELEASE_TAG}" \
+            --generate-notes
