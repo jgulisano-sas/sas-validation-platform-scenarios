@@ -8,7 +8,6 @@ scenario-config:
     - workload-definitions/sas-viya-cli-wrkld-def.yaml
   required-resources:
     - scenarios/technology-scenarios/sas-viya-cli/resources/test.sas
-
   name: sas-viya-cli-batch
   description: SAS viya cli batch tests
   dependencies:

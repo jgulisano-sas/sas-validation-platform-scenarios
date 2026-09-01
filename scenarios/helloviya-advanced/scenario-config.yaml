@@ -12,7 +12,6 @@ scenario-config:
     - resources/sas_program/sleep_20.sas
     - resources/sas_program/sleep_40.sas
     - resources/data/class.csv
-
   name: hello-viya-advanced
   description: A more indepth set of viya end to end tests that goes thru various SAS viya aplications and makes sure applications are alive and well.
   dependencies:

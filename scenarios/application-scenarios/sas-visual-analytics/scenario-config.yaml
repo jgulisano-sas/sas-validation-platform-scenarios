@@ -8,7 +8,6 @@ scenario-config:
     - workload-definitions/sas-visual-analytics-wrkld-def.yaml
   required-resources:
     - resources/data/class.csv
-
   name: sas-visual-analytics
   description: SAS Visual Analytics scenarios
   dependencies:
