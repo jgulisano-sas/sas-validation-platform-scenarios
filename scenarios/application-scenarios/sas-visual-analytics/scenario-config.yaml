@@ -4,11 +4,12 @@ scenario-config:
   runtime: locust
   entrypoints:
     - tests/va_simplecreate01.py
+    - tests/vdmml_simplecreate01.py
+    - tests/vs_simplecreate01.py
   workload-definitions:
     - workload-definitions/sas-visual-analytics-wrkld-def.yaml
   required-resources:
     - resources/data/class.csv
-
   name: sas-visual-analytics
   description: SAS Visual Analytics scenarios
   dependencies:
