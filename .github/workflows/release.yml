@@ -3,6 +3,7 @@ name: Release scenario package
 on:
   push:
     tags:
+      - "[0-9][0-9][0-9][0-9].[0-9][0-9]"
       - "[0-9][0-9][0-9][0-9].[0-9][0-9].[0-9]*"
 
 permissions:
@@ -37,8 +38,8 @@ jobs:
 
           tag = os.environ["RELEASE_TAG"]
           expected_repository = os.environ["EXPECTED_REPOSITORY"]
-          if not re.fullmatch(r"\d{4}\.\d{2}\.\d+", tag):
-              raise SystemExit(f"Release tag must be YYYY.MM.PATCH: {tag}")
+          if not re.fullmatch(r"\d{4}\.\d{2}(\.\d+)?", tag):
+              raise SystemExit(f"Release tag must be YYYY.MM or YYYY.MM.PATCH: {tag}")
 
           manifest_path = Path("release-manifest.yaml")
           values = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))

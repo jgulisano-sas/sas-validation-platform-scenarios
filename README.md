@@ -35,7 +35,8 @@ definitions that span several scenarios; they are not owned by any single scenar
 SAS Viya changes between cadences, so scenario content is maintained per cadence:
 
 - **Branch** — a mutable maintenance line for one cadence, e.g. `2026.06`
-- **Tag** — an immutable release cut from that branch, e.g. `2026.06.1`
+- **Tag** — an immutable release cut from that branch. A bare `2026.06` tag is the implied `.0`
+  release for that cadence; a later fix is tagged `2026.06.1`, `2026.06.2`, etc.
 - **Release asset** — `sas-validation-platform-scenarios-<version>.tar.gz`, plus a SHA-256 checksum
 
 Consumers install by version, never by branch. Use the package whose `viya-cadence` matches your
