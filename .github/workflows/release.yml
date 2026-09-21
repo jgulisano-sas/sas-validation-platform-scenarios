@@ -50,6 +50,12 @@ jobs:
               if field not in values:
                   raise SystemExit(f"release-manifest.yaml is missing '{field}'")
 
+          # unquoted YYYY.MM(.PATCH) values parse as numbers unless quoted in the manifest
+          if not isinstance(values["version"], str):
+              raise SystemExit(
+                  "release-manifest.yaml 'version' must be a quoted string, got "
+                  f"{values['version']!r}"
+              )
           if values["version"] != tag:
               raise SystemExit(
                   f"Manifest version '{values['version']}' does not match tag '{tag}'"
