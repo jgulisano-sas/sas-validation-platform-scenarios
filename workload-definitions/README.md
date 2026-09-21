@@ -4,6 +4,15 @@ This folder contains the workload-definitions for scenario execution.
 Each scenario has an associated workload-definition for that scenarios. 
 Mixed and complex workload definitions can be built from these basic definitions. 
 
+Once a package is installed, list what is available instead of browsing the install cache:
+
+```bash
+sas-validation list-workloads                       # every installed package
+sas-validation list-workloads --scenario sas-studio # only workloads using that scenario
+```
+
+The `name` printed by `list-workloads` is what `-w/--workload-definition` accepts.
+
 ###  Single Scenario workloads (sequential)
 
 | Scenario         | workload-definitions                               |

@@ -3,8 +3,9 @@
 All notable changes to the scenario packages published from this repository are documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
-Versions follow the cadence release scheme `YYYY.MM.PATCH`, where `YYYY.MM` is the SAS Viya cadence
-the package targets.
+Versions follow the cadence release scheme `YYYY.MM[.PATCH]`, where `YYYY.MM` is the SAS Viya cadence
+the package targets. A bare `YYYY.MM` tag is the implied `.0` release for that cadence; later fixes
+are tagged `YYYY.MM.1`, `YYYY.MM.2`, etc.
 
 ## [Unreleased]
 
