@@ -11,7 +11,7 @@ are tagged `YYYY.MM.1`, `YYYY.MM.2`, etc.
 
 Development toward SAS Viya cadence **2026.07**.
 
-## [2026.06.1] — not yet released
+## [2026.07] — not yet released
 
 Targets SAS Viya cadence **2026.06**.
 
